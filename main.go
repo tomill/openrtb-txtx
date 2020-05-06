@@ -1,22 +1,19 @@
 package main
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
+	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/proto"
 	"github.com/voyagegroup/fluct_pb/go/adx"
 	"github.com/voyagegroup/fluct_pb/go/openrtb"
 )
 
 var (
 	_ adx.BidRequestExt
-	_ adx.ImpExt
-	_ adx.AppExt
-	_ adx.SiteExt
-	_ adx.UserExt
-	_ adx.BidExt
 )
 
 func main() {
@@ -24,19 +21,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	s := string(b)
 
-	var msg openrtb.BidRequest
-	if err := json.Unmarshal(b, &msg); err != nil {
+	var msg interface{}
+	if strings.Contains(s, `,"imp":`) {
+		msg = &openrtb.BidRequest{}
+	} else if strings.Contains(s, `,"seatbid":`) {
+		msg = &openrtb.BidResponse{}
+	}
+
+	var data = (msg).(proto.Message)
+	if err := jsonpb.UnmarshalString(s, data); err != nil {
 		log.Fatal(err)
 	}
-	if msg.String() == "" {
-		log.Fatal("Unmarshal failedddd")
+	if err := proto.MarshalText(os.Stdout, data); err != nil {
+		log.Fatal(err)
 	}
-	//
-	//x, err := proto.GetExtension(&msg, adx.E_BidRequest)
-	//fmt.Printf("--\n%#v\n", x)
-	//
-	//if err := proto.MarshalText(os.Stdout, &msg); err != nil {
-	//	log.Fatal(err)
-	//}
 }
