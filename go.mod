@@ -1,8 +1,8 @@
-module github.com/tomill/openrtb-json2text
+module github.com/tomill/openrtb-txtx
 
 go 1.14
 
 require (
 	github.com/golang/protobuf v1.2.0
-	github.com/voyagegroup/fluct_pb/go v0.0.0-20200427062845-4071b2d8c4e5
+	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
 )
