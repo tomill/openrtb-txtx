@@ -1,8 +1,11 @@
 
-build: gen
+install: internal
+	go install
+
+build: internal
 	go build
 
-gen: openrtb.proto openrtb-adx.proto
+internal: openrtb.proto openrtb-adx.proto
 	mkdir -p internal/openrtb internal/adx
 	protoc --go_out=import_path=openrtb:internal/openrtb openrtb.proto
 	protoc --go_out=import_path=adx,Mopenrtb.proto=github.com/tomill/openrtb-txtx/internal/openrtb:internal/adx openrtb-adx.proto
