@@ -21,5 +21,5 @@ openrtb-adx.proto:
 	curl -sL https://developers.google.com/authorized-buyers/rtb/downloads/openrtb-adx-proto.txt >> $@
 
 test:
-	diff -u <(cat testdata/imp.text | go run main.go -in text -out json imp) testdata/imp.json
-	diff -u <(cat testdata/imp.json | go run main.go -in json -out text imp) testdata/imp.text
+	bash -c "diff --strip-trailing-cr -u <(cat testdata/imp.text | go run main.go imp) testdata/imp.json"
+	bash -c "diff --strip-trailing-cr -u <(cat testdata/imp.json | go run main.go imp) testdata/imp.text"

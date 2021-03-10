@@ -46,7 +46,7 @@ func main() {
 			log.Fatal(err)
 		}
 	case "json":
-		if err := (&jsonpb.Marshaler{}).Marshal(os.Stdout, msg); err != nil {
+		if err := (&jsonpb.Marshaler{Indent: "  "}).Marshal(os.Stdout, msg); err != nil {
 			log.Fatal(err)
 		}
 	}

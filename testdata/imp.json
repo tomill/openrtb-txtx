@@ -1,1 +1,6 @@
-{"id":"id","[com.google.doubleclick.imp]":{"dfpAdUnitCode":"foo"}}
+{
+  "id": "id",
+  "[com.google.doubleclick.imp]": {
+    "dfpAdUnitCode": "foo"
+  }
+}
