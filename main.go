@@ -15,8 +15,8 @@ import (
 
 var (
 	_      adx.BidRequestExt
-	input  = flag.String("in", "json", "")
-	output = flag.String("out", "text", "")
+	input  = flag.String("in", "", "json or text")
+	output = flag.String("out", "", "json or text")
 )
 
 func main() {
@@ -28,6 +28,14 @@ func main() {
 		log.Fatal(err)
 	}
 	s := string(b)
+
+	if *input == "" && strings.HasPrefix(s, "{") {
+		*input = "json"
+		*output = "text"
+	} else if *input == "" {
+		*input = "text"
+		*output = "json"
+	}
 
 	switch *input {
 	case "text":
@@ -46,7 +54,7 @@ func main() {
 			log.Fatal(err)
 		}
 	case "json":
-		if err := (&jsonpb.Marshaler{}).Marshal(os.Stdout, msg); err != nil {
+		if err := (&jsonpb.Marshaler{Indent: "  "}).Marshal(os.Stdout, msg); err != nil {
 			log.Fatal(err)
 		}
 	}
