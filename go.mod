@@ -3,6 +3,6 @@ module github.com/tomill/openrtb-txtx
 go 1.14
 
 require (
-	github.com/golang/protobuf v1.2.0
-	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
+	github.com/golang/protobuf v1.4.1
+	google.golang.org/protobuf v1.25.0
 )
