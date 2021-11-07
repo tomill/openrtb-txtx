@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/tomill/openrtb-txtx/internal/adx"
 	"github.com/tomill/openrtb-txtx/internal/openrtb"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -18,7 +19,7 @@ import (
 var (
 	_      adx.BidRequestExt
 	input  = flag.String("in", "", "json or text")
-	output = flag.String("out", "", "json or text")
+	output = flag.String("out", "", "json or text or dump")
 )
 
 func main() {
@@ -65,6 +66,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+	case "dump":
+		spew.Dump(msg)
+		os.Exit(0)
 	}
 
 	fmt.Println(string(o))
