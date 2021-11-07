@@ -2,21 +2,24 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/tomill/openrtb-txtx/internal/adx"
 	"github.com/tomill/openrtb-txtx/internal/openrtb"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 )
 
 var (
 	_      adx.BidRequestExt
 	input  = flag.String("in", "", "json or text")
-	output = flag.String("out", "", "json or text")
+	output = flag.String("out", "", "json or text or dump")
 )
 
 func main() {
@@ -27,37 +30,48 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	s := string(b)
 
-	if *input == "" && strings.HasPrefix(s, "{") {
+	if *input == "" && strings.HasPrefix(string(b), "{") {
 		*input = "json"
-		*output = "text"
+		if *output == "" {
+			*output = "text"
+		}
 	} else if *input == "" {
 		*input = "text"
-		*output = "json"
+		if *output == "" {
+			*output = "json"
+		}
 	}
 
 	switch *input {
 	case "text":
-		if err := proto.UnmarshalText(s, msg); err != nil {
+		if err := prototext.Unmarshal(b, msg); err != nil {
 			log.Fatal(err)
 		}
 	case "json":
-		if err := jsonpb.UnmarshalString(s, msg); err != nil {
+		if err := protojson.Unmarshal(b, msg); err != nil {
 			log.Fatal(err)
 		}
 	}
 
+	var o []byte
 	switch *output {
 	case "text":
-		if err := proto.MarshalText(os.Stdout, msg); err != nil {
+		o, err = prototext.MarshalOptions{Multiline: true}.Marshal(msg)
+		if err != nil {
 			log.Fatal(err)
 		}
 	case "json":
-		if err := (&jsonpb.Marshaler{Indent: "  "}).Marshal(os.Stdout, msg); err != nil {
+		o, err = protojson.MarshalOptions{Multiline: true, UseProtoNames: true, UseEnumNumbers: true}.Marshal(msg)
+		if err != nil {
 			log.Fatal(err)
 		}
+	case "dump":
+		spew.Dump(msg)
+		os.Exit(0)
 	}
+
+	fmt.Println(string(o))
 }
 
 func message(s string) proto.Message {

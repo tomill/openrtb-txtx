@@ -1,6 +1,14 @@
 {
-  "id": "id",
-  "[com.google.doubleclick.imp]": {
-    "dfpAdUnitCode": "foo"
+  "id":  "id",
+  "banner":  {
+    "w":  300,
+    "h":  250,
+    "api":  [
+      2,
+      7
+    ]
+  },
+  "[com.google.doubleclick.imp]":  {
+    "dfp_ad_unit_code":  "foo"
   }
 }

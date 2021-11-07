@@ -14,7 +14,7 @@ make install
 openrtb-txtx [--in ...] [--out ...] [message name]
 
   --in string json or text
-  --out string json or text
+  --out string json or text or dump
   
   message name: default is "BidRequest"
 ```
@@ -24,31 +24,18 @@ openrtb-txtx [--in ...] [--out ...] [message name]
 json to "protobuf text format" (message type is BidRequest (default))
 
 ```
-$ cat req.json | openrtb-txtx
+$ cat req.json | openrtb-txtx req
 
-id: "xxxxxxxxxxxxxxxxxxxxxx"
-imp: <
-  id: "1"
-  banner: <
+id:  "xxxxxxxxxxxxxxxxxxxxxx"
+imp:  {
+  id:  "1"
+  banner:  {
     w: 300
     h: 250
-    format: <
+    format:  {
       w: 300
       h: 250
-    >
-```
-
-json to "protobuf text format", BidResponse message
-
-```
-$ cat res.json | openrtb-txtx BidResponse
-
-id: "00000000-0000-0000-0000-000000000000.0000"
-seatbid: <
-  bid: <
-    id: "1"
-    impid: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-    price: 1.00000
+    }
 ```
 
 "protobuf text format" to json
