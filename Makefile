@@ -2,13 +2,16 @@
 install: internal
 	go install
 
-build: internal
-	go build
+deps:
+	go get google.golang.org/protobuf/cmd/protoc-gen-go
 
-internal: openrtb.proto openrtb-adx.proto
-	mkdir -p internal/openrtb internal/adx
-	protoc --go_out=. --go_opt=Mopenrtb.proto=internal/openrtb openrtb.proto
-	protoc --go_out=. --go_opt=Mopenrtb-adx.proto=internal/adx --go_opt=Mopenrtb.proto=github.com/tomill/openrtb-txtx/internal/openrtb openrtb-adx.proto
+internal: deps openrtb.proto openrtb-adx.proto
+	mkdir -p internal/openrtb
+	protoc --go_out=. --go_opt=Mopenrtb-adx.proto=internal/openrtb,Mopenrtb.proto=internal/openrtb openrtb.proto openrtb-adx.proto
+
+test:
+	bash -c "diff -u testdata/imp.json <(cat testdata/imp.text | go run main.go imp)"
+	bash -c "diff -u testdata/imp.text <(cat testdata/imp.json | go run main.go imp)"
 
 .PHONY: *.proto
 
@@ -19,7 +22,3 @@ openrtb.proto:
 openrtb-adx.proto:
 	echo "// @ref https://developers.google.com/authorized-buyers/rtb/data" > $@
 	curl -sL https://developers.google.com/authorized-buyers/rtb/downloads/openrtb-adx-proto.txt >> $@
-
-test:
-	bash -c "diff -u testdata/imp.json <(cat testdata/imp.text | go run main.go imp)"
-	bash -c "diff -u testdata/imp.text <(cat testdata/imp.json | go run main.go imp)"
