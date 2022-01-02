@@ -27,8 +27,8 @@ jobs:
       -
         name: Tests
         run: |
+          go get google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
           make deps test
-          go mod tidy
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
