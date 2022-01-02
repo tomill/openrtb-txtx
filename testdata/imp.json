@@ -1,14 +1,14 @@
 {
-  "id": "id",
-  "banner": {
-    "w": 300,
-    "h": 250,
-    "api": [
+  "id":  "id",
+  "banner":  {
+    "w":  300,
+    "h":  250,
+    "api":  [
       2,
       7
     ]
   },
-  "[com.google.doubleclick.imp]": {
-    "dfp_ad_unit_code": "foo"
+  "[com.google.doubleclick.imp]":  {
+    "dfp_ad_unit_code":  "foo"
   }
 }
