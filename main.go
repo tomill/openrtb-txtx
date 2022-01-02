@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/tomill/openrtb-txtx/internal/adx"
 	"github.com/tomill/openrtb-txtx/internal/openrtb"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/encoding/prototext"
@@ -17,7 +16,6 @@ import (
 )
 
 var (
-	_      adx.BidRequestExt
 	input  = flag.String("in", "", "json or text")
 	output = flag.String("out", "", "json or text or dump")
 )
@@ -49,8 +47,12 @@ func main() {
 			log.Fatal(err)
 		}
 	case "json":
-		if err := protojson.Unmarshal(b, msg); err != nil {
+		if err := (protojson.UnmarshalOptions{DiscardUnknown: true}).Unmarshal(b, msg); err != nil {
 			log.Fatal(err)
+		}
+	case "dummy":
+		msg = &openrtb.BidRequest_Imp{
+			Id: proto.String("dummy"),
 		}
 	}
 
