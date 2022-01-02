@@ -24,8 +24,8 @@ jobs:
       -
         name: Tests
         run: |
-          go mod tidy
           make deps test
+          go mod tidy
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
