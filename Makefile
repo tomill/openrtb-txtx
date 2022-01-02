@@ -1,11 +1,8 @@
 
-install: internal
+install: deps
 	go install
 
-deps:
-	go get google.golang.org/protobuf/cmd/protoc-gen-go
-
-internal: deps openrtb.proto openrtb-adx.proto
+deps: openrtb.proto openrtb-adx.proto
 	mkdir -p internal/openrtb
 	protoc --go_out=. --go_opt=Mopenrtb-adx.proto=internal/openrtb,Mopenrtb.proto=internal/openrtb openrtb.proto openrtb-adx.proto
 
